@@ -1,30 +1,6 @@
-![Floor](https://raw.githubusercontent.com/pinchbv/floor/develop/img/floor.png)
+# Getting Started
 
-**See the [project's website](https://pinchbv.github.io/floor/) for the full documentation.**
-
-Floor provides a neat SQLite abstraction for your Flutter applications inspired by the [Room persistence library](https://developer.android.com/topic/libraries/architecture/room).
-It comes with automatic mapping between in-memory objects and database rows while still offering full control of the database with the use of SQL.
-As a consequence, it's necessary to have an understanding of SQL and SQLite in order to harvest Floor's full potential.
-
-- null-safe
-- typesafe
-- reactive
-- lightweight
-- SQL centric
-- no hidden magic
-- no hidden costs
-- iOS, Android, Linux, macOS, Windows
-
-⚠️ The library is open to contributions!
-Refer to [GitHub Discussions](https://github.com/pinchbv/floor/discussions) for questions, ideas, and discussions.
-
-[![pub package](https://img.shields.io/pub/v/floor.svg)](https://pub.dartlang.org/packages/floor)
-[![build status](https://github.com/pinchbv/floor/workflows/CI/badge.svg)](https://github.com/pinchbv/floor/actions)
-[![codecov](https://codecov.io/gh/pinchbv/floor/branch/develop/graph/badge.svg)](https://codecov.io/gh/pinchbv/floor)
-
-## Getting Started
-
-### 1. Setup Dependencies
+## 1. Setup Dependencies
 
 Add the runtime dependency `floor` as well as the generator `floor_generator` to your `pubspec.yaml`.
 The third dependency is `build_runner` which has to be included as a dev dependency just like the generator.
@@ -37,14 +13,14 @@ The third dependency is `build_runner` which has to be included as a dev depende
 dependencies:
   flutter:
     sdk: flutter
-  floor: ^1.4.2
+  floor: ^1.4.0
 
 dev_dependencies:
-  floor_generator: ^1.4.2
+  floor_generator: ^1.4.0
   build_runner: ^2.1.2
 ```
 
-### 2. Create an Entity
+## 2. Create an Entity
 
 It will represent a database table as well as the scaffold of your business object.
 `@entity` marks the class as a persistent class.
@@ -61,14 +37,14 @@ import 'package:floor/floor.dart';
 class Person {
   @primaryKey
   final int id;
-
+  
   final String name;
-
+  
   Person(this.id, this.name);
 }
 ```
 
-### 3. Create a DAO (Data Access Object)
+## 3. Create a DAO (Data Access Object)
 
 This component is responsible for managing access to the underlying SQLite database.
 The abstract class contains the method signatures for querying the database which have to return a `Future` or `Stream`.
@@ -86,20 +62,17 @@ import 'package:floor/floor.dart';
 @dao
 abstract class PersonDao {
   @Query('SELECT * FROM Person')
-  Future<List<Person>> findAllPeople();
-
-  @Query('SELECT name FROM Person')
-  Stream<List<String>> findAllPeopleName();
-
+  Future<List<Person>> findAllPersons();
+  
   @Query('SELECT * FROM Person WHERE id = :id')
   Stream<Person?> findPersonById(int id);
-
+  
   @insert
   Future<void> insertPerson(Person person);
 }
 ```
 
-### 4. Create the Database
+## 4. Create the Database
 
 It has to be an abstract class which extends `FloorDatabase`.
 Furthermore, it's required to add `@Database()` to the signature of the class.
@@ -129,12 +102,12 @@ abstract class AppDatabase extends FloorDatabase {
 }
 ```
 
-### 5. Run the Code Generator
+## 5. Run the Code Generator
 
 Run the generator with `flutter packages pub run build_runner build`.
 To automatically run it, whenever a file changes, use `flutter packages pub run build_runner watch`.
 
-### 6. Use the Generated Code
+## 6. Use the Generated Code
 
 For obtaining an instance of the database, use the generated `$FloorAppDatabase` class, which allows access to a database builder.
 The name is being composed by `$Floor` and the database class name.
@@ -154,28 +127,4 @@ await personDao.insertPerson(person);
 final result = await personDao.findPersonById(1);
 ```
 
-For further examples take a look at the [example](https://github.com/pinchbv/floor/tree/develop/example) and [test](https://github.com/pinchbv/floor/tree/develop/floor/test/integration) directories.
-
-## Naming
-The library's name derives from the following.
-*Floor* as the *bottom layer* of a [Room](https://developer.android.com/topic/libraries/architecture/room) which points to the analogy of the database layer being the bottom and foundation layer of most applications.
-Where *fl* also gives a pointer that the library is used in the Flutter context.
-
-## Bugs, Ideas, and Feedback
-For bugs please use [GitHub Issues](https://github.com/pinchbv/floor/issues).
-For questions, ideas, and discussions use [GitHub Discussions](https://github.com/pinchbv/floor/discussions).
-
-## License
-    Copyright 2023 The Floor Project Authors
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
+For further examples take a look at the [example](https://github.com/vitusortner/floor/tree/develop/example) and [test](https://github.com/vitusortner/floor/tree/develop/floor/test/integration) directories.
